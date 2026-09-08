@@ -5,13 +5,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pe.edu.upeu</groupId>
-    <artifactId>SysVentas</artifactId>
+    <artifactId>AlgoritmosGUI</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>SysVentas</name>
+    <name>AlgoritmosGUI</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.12.1</junit.version>
+        <gluonfx.target>host</gluonfx.target>
+        <gluonfx.plugin.version>1.0.29</gluonfx.plugin.version>
     </properties>
 
     <dependencies>
@@ -31,17 +33,6 @@
             <version>11.2.1</version>
         </dependency>
         <dependency>
-            <groupId>com.dlsc.formsfx</groupId>
-            <artifactId>formsfx-core</artifactId>
-            <version>11.6.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit.version}</version>
@@ -53,36 +44,6 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- Source: https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.46</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- Source: https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>8.0.3.Final</version>
-        </dependency>
-
-        <!-- Source: https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
-        <dependency>
-            <groupId>jakarta.validation</groupId>
-            <artifactId>jakarta.validation-api</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-
-        <!-- Source: https://mvnrepository.com/artifact/org.glassfish.expressly/expressly -->
-        <dependency>
-            <groupId>org.glassfish.expressly</groupId>
-            <artifactId>expressly</artifactId>
-            <version>5.0.0</version>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -96,6 +57,36 @@
                     <target>21</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.gluonhq</groupId>
+                <artifactId>gluonfx-maven-plugin</artifactId>
+                <version>${gluonfx.plugin.version}</version>
+                <configuration>
+                    <target>${gluonfx.target}</target>
+                    <mainClass>pe.edu.upeu.algoritmosgui.Launcher</mainClass>
+                    <appIdentifier>pe.edu.upeu.algoritmosgui</appIdentifier>
+                    <!-- Ponlo a true la primera vez: verás qué está pasando -->
+                    <verbose>true</verbose>
+                    <!-- Descomenta si no puedes usar la variable GRAALVM_HOME
+                    <graalvmHome>/ruta/a/graalvm</graalvmHome>
+                    -->
+                    <!-- Activa esto solo si el binario no arranca por falta de GPU -->
+                    <!-- <enableSWRendering>true</enableSWRendering> -->
+                    <!-- CRÍTICO: Registrar clases que JavaFX instancia por reflexión -->
+                    <reflectionList>
+                        <list>pe.edu.upeu.algoritmosgui.HelloApplication</list>
+                        <list>pe.edu.upeu.algoritmosgui.MatrizTriangular</list>
+                    </reflectionList>
+                    <releaseConfiguration>
+                        <vendor>Mi Empresa S.A.</vendor>
+                        <description>Mi aplicación nativa</description>
+                        <version>1.0.0</version>
+                    </releaseConfiguration>
+                </configuration>
+            </plugin>
+
+
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -105,7 +96,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>pe.edu.upeu.sysventas/pe.edu.upeu.sysventas.SysVentas</mainClass>
+                            <mainClass>pe.edu.upeu.algoritmosgui/pe.edu.upeu.algoritmosgui.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
@@ -118,4 +109,17 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>desktop</id>
+            <activation><activeByDefault>true</activeByDefault></activation>
+            <properties><gluonfx.target>host</gluonfx.target></properties>
+        </profile>
+        <profile>
+            <id>android</id>
+            <properties><gluonfx.target>android</gluonfx.target></properties>
+        </profile>
+    </profiles>
+
 </project>
