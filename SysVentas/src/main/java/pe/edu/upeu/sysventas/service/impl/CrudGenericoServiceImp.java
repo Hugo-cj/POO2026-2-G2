@@ -6,7 +6,7 @@ import pe.edu.upeu.sysventas.service.ICrudGenericoService;
 
 import java.util.List;
 
-public abstract class CrudGenericoServiceimp<T, ID> implements ICrudGenericoService<T,ID> {
+public abstract class CrudGenericoServiceImp<T, ID> implements ICrudGenericoService<T,ID> {
 
     protected abstract ICrudGenericoRepository<T,ID> getRepo();
 
