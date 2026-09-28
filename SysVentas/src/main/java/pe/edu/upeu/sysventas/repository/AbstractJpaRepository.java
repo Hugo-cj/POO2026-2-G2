@@ -13,6 +13,7 @@ public abstract class AbstractJpaRepository<T,ID>
     protected abstract void setId(T entity, ID id);
     protected abstract ID generateId();
 
+
     @Override
     public T save(T entity) {
         if(getId(entity)==null){
@@ -25,14 +26,14 @@ public abstract class AbstractJpaRepository<T,ID>
     @Override
     public T update(T entity) {
         ID id=getId(entity);
-        for(int i=0;i<data.size();i++){
+        for (int i=0;i<data.size();i++){
             T item=data.get(i);
             if(getId(item).equals(id)){
                 data.set(i,entity);
                 return entity;
             }
         }
-        throw  new RuntimeException("No se encontro la entidad con el ID: "+id);
+        throw  new RuntimeException("No se encontro la entidad con el ID:"+id);
     }
 
     @Override
